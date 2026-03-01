@@ -43,9 +43,9 @@ services:
       APP_HOST: ${APP_HOST}
       SECRET_JWT: ${SECRET_JWT}
       JWT_EXPIRATION_HOURS: ${JWT_EXPIRATION_HOURS}
-    # depends_on:
-    #   database:
-    #     condition: service_healthy
+    depends_on:
+      database:
+        condition: service_healthy
     healthcheck:
       test:
         [
