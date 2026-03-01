@@ -42,9 +42,9 @@ services:
       RUN_SEED: ${RUN_SEED}
       APP_DOMAIN: ${APP_DOMAIN}
       NODE_ENV: development
-    depends_on:
-      database:
-        condition: service_healthy
+    # depends_on:
+    #   database:
+    #     condition: service_healthy
     healthcheck:
       test:
         [
@@ -68,9 +68,9 @@ services:
       API_URL: ${API_URL}
       NODE_ENV: development
       PORT: ${APP_PORT}
-    depends_on:
-      servers:
-        condition: service_healthy
+    # depends_on:
+    #   servers:
+    #     condition: service_healthy
     networks:
       - gateway-nginx
 
