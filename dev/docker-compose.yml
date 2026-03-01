@@ -21,7 +21,7 @@ services:
 
   servers:
     container_name: acs-website-server-dev
-    image: ghcr.io/narutchai01/acs-be:v0.4.3
+    image: ghcr.io/narutchai01/acs-core-service:1.0.51
     restart: unless-stopped
     ports:
       - "${PORT}:${PORT}"
@@ -60,7 +60,7 @@ services:
 
   portal:
     container_name: acs-website-portal-dev
-    image: ghcr.io/narutchai01/acs-fe:v3.0.8
+    image: ghcr.io/narutchai01/acs-fe:v3.1.3
     restart: unless-stopped
     ports:
       - "${APP_PORT}:${APP_PORT}"
