@@ -69,9 +69,9 @@ services:
       API_URL: ${API_URL}
       NODE_ENV: development
       PORT: ${PORTAL_PORT}
-    depends_on:
-      servers:
-        condition: service_healthy
+    # depends_on:
+    #   servers:
+    #     condition: service_healthy
     networks:
       - gateway-nginx
 
