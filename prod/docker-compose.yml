@@ -70,11 +70,11 @@ services:
     # depends_on:
     #   servers:
     #     condition: service_healthy
-    networks:
-      - gateway-nginx
+    # networks:
+    #   - gateway-nginx
 
 networks:
   acs-prod-network:
     driver: bridge
-  gateway-nginx:
-    external: true
+  # gateway-nginx:
+  #   external: true
