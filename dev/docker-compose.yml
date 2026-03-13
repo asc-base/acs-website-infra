@@ -50,7 +50,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "curl -f http://localhost:${APP_PORT}/api/v1/health || exit 1",
+          "curl -f https://localhost:${APP_PORT}/api/v1/health || exit 1",
         ]
       interval: 30s
       timeout: 10s
@@ -69,9 +69,9 @@ services:
       API_URL: ${API_URL}
       NODE_ENV: development
       PORT: ${PORTAL_PORT}
-    # depends_on:
-    #   servers:
-    #     condition: service_healthy
+    depends_on:
+      servers:
+        condition: service_healthy
     networks:
       - gateway-nginx
 
