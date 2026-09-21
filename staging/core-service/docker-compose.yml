@@ -2,7 +2,7 @@ services:
   servers:
     platform: linux/amd64
     container_name: acs-core-service-staging
-    image: ghcr.io/asc-base/acs-core-service:staging-e08f55d68a1791caca8bcc7c91cae299c92e45c0
+    image: ghcr.io/asc-base/acs-core-service:staging-877835f7b55a940a1e6fba5703210bbaa1de8406
     restart: unless-stopped
     environment:
       APP_PORT: ${APP_PORT}
