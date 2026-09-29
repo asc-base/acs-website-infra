@@ -24,7 +24,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=acs-prod-network
-      - "traefik.http.routers.acs-core.rule=Host(`acs.kmutt.ac.th`) && (Path(`/api`) || PathPrefix(`/api/`)) && !(Path(`/api/bff`) || PathPrefix(`/api/bff/`))"
+      - "traefik.http.routers.acs-core.rule=Host(`acs.kmutt.ac.th`) && (Path(`/api`) || PathPrefix(`/api/`))"
       - traefik.http.routers.acs-core.entrypoints=web
       - traefik.http.routers.acs-core.priority=100
       - traefik.http.routers.acs-core.service=acs-core

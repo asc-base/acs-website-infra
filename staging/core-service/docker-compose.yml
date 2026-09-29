@@ -5,7 +5,7 @@ services:
     image: ghcr.io/asc-base/acs-core-service:staging-877835f7b55a940a1e6fba5703210bbaa1de8406
     restart: unless-stopped
     environment:
-      APP_PORT: ${APP_PORT}
+      APP_PORT: ${APP_PORT:?APP_PORT must be set}
       SUPABASE_URL: ${SUPABASE_URL}
       SUPABASE_KEY: ${SUPABASE_KEY}
       SUPABASE_BUCKET: ${SUPABASE_BUCKET}
@@ -19,3 +19,27 @@ services:
       ALLOW_ORIGIN: ${ALLOW_ORIGIN}
       SKIP_MIGRATE: ${SKIP_MIGRATE}
       RUN_SEED: ${RUN_SEED}
+    expose:
+      - "${APP_PORT:?APP_PORT must be set}"
+    networks:
+      - dokploy-network
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=dokploy-network
+      - "traefik.http.routers.acs-core-staging-http.rule=Host(`${STAGING_HOST:?STAGING_HOST must be set}`) && (Path(`/api`) || PathPrefix(`/api/`))"
+      - traefik.http.routers.acs-core-staging-http.entrypoints=web
+      - traefik.http.routers.acs-core-staging-http.priority=100
+      - traefik.http.routers.acs-core-staging-http.middlewares=acs-core-staging-https
+      - traefik.http.routers.acs-core-staging-http.service=acs-core-staging
+      - traefik.http.middlewares.acs-core-staging-https.redirectscheme.scheme=https
+      - "traefik.http.routers.acs-core-staging-https.rule=Host(`${STAGING_HOST:?STAGING_HOST must be set}`) && (Path(`/api`) || PathPrefix(`/api/`))"
+      - traefik.http.routers.acs-core-staging-https.entrypoints=websecure
+      - traefik.http.routers.acs-core-staging-https.priority=100
+      - traefik.http.routers.acs-core-staging-https.tls=true
+      - traefik.http.routers.acs-core-staging-https.tls.certresolver=letsencrypt
+      - traefik.http.routers.acs-core-staging-https.service=acs-core-staging
+      - traefik.http.services.acs-core-staging.loadbalancer.server.port=${APP_PORT:?APP_PORT must be set}
+
+networks:
+  dokploy-network:
+    external: true

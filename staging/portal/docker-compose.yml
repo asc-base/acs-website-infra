@@ -4,9 +4,15 @@ services:
     image: ghcr.io/asc-base/acs-portal:staging-f5b7afe6289eb9fb537d421b33547f98cb64e97a
     restart: unless-stopped
     environment:
-      API_URL: ${API_URL}
+      # Use the core-service origin reachable over dokploy-network.
+      API_URL: ${API_URL:?API_URL must be set}
       NODE_ENV: staging
-      # PORT: ${PORTAL_PORT}
-    # depends_on:
-    #   servers:
-    #     condition: service_healthy
+      PORT: "3000"
+    expose:
+      - "3000"
+    networks:
+      - dokploy-network
+
+networks:
+  dokploy-network:
+    external: true
