@@ -1,0 +1,24 @@
+services:
+  traefik:
+    container_name: acs-website-traefik-prod
+    image: traefik:v3.7
+    restart: unless-stopped
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.network=acs-prod-network
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.forwardedheaders.trustedips=${TRUSTED_PROXY_IPS:?TRUSTED_PROXY_IPS must be set}
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - acs-prod-network
+
+networks:
+  acs-prod-network:
+    external: true
+    name: acs-prod-network

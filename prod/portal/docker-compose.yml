@@ -3,17 +3,23 @@ services:
     container_name: acs-website-portal-prod
     image: ghcr.io/asc-base/acs-portal:v3.6.0
     restart: unless-stopped
-    ports:
-      - "${PORTAL_PORT}:${PORTAL_PORT}"
     environment:
-      API_URL: ${API_URL}
+      API_URL: ${API_URL:-https://acs.kmutt.ac.th}
       NODE_ENV: PRODUCTION
-      PORT: ${PORTAL_PORT}
+      PORT: "3000"
     # depends_on:
     #   servers:
     #     condition: service_healthy
     networks:
       - acs-prod-network
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=acs-prod-network
+      - traefik.http.routers.acs-portal.rule=Host(`acs.kmutt.ac.th`)
+      - traefik.http.routers.acs-portal.entrypoints=web
+      - traefik.http.routers.acs-portal.priority=1
+      - traefik.http.routers.acs-portal.service=acs-portal
+      - traefik.http.services.acs-portal.loadbalancer.server.port=3000
 
 networks:
   acs-prod-network:
