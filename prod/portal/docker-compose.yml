@@ -4,8 +4,8 @@ services:
     image: ghcr.io/asc-base/acs-portal:v3.6.0
     restart: unless-stopped
     environment:
-      API_URL: ${API_URL:-https://acs.kmutt.ac.th}
-      NODE_ENV: PRODUCTION
+      API_URL: ${API_URL}
+      NODE_ENV: staging
       PORT: "3000"
     # depends_on:
     #   servers:
