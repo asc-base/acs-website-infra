@@ -1,7 +1,7 @@
 services:
   portal:
     container_name: acs-website-portal-staging
-    image: ghcr.io/asc-base/acs-portal:staging-f5b7afe6289eb9fb537d421b33547f98cb64e97a
+    image: ghcr.io/asc-base/acs-portal@sha256:acc67add9d4674dbef62d991522b6a732603a5a2ceb1c61094c7223766829284
     restart: unless-stopped
     environment:
       # Use the core-service origin reachable over dokploy-network.
