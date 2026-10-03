@@ -27,13 +27,13 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=dokploy-network
-      - "traefik.http.routers.acs-media-staging-http.rule=Host(`${STAGING_HOST:?STAGING_HOST must be set}`) && Method(`GET`,`HEAD`) && PathPrefix(`/media/acs-media/public/profiles/`)"
+      - "traefik.http.routers.acs-media-staging-http.rule=Host(`${STAGING_HOST:?STAGING_HOST must be set}`) && Method(`GET`,`HEAD`) && (PathPrefix(`/media/acs-media/public/profiles/`) || PathPrefix(`/media/acs-media/public/news/`))"
       - traefik.http.routers.acs-media-staging-http.entrypoints=web
       - traefik.http.routers.acs-media-staging-http.priority=100
       - traefik.http.routers.acs-media-staging-http.middlewares=acs-media-staging-https
       - traefik.http.routers.acs-media-staging-http.service=acs-media-staging
       - traefik.http.middlewares.acs-media-staging-https.redirectscheme.scheme=https
-      - "traefik.http.routers.acs-media-staging-https.rule=Host(`${STAGING_HOST:?STAGING_HOST must be set}`) && Method(`GET`,`HEAD`) && PathPrefix(`/media/acs-media/public/profiles/`)"
+      - "traefik.http.routers.acs-media-staging-https.rule=Host(`${STAGING_HOST:?STAGING_HOST must be set}`) && Method(`GET`,`HEAD`) && (PathPrefix(`/media/acs-media/public/profiles/`) || PathPrefix(`/media/acs-media/public/news/`))"
       - traefik.http.routers.acs-media-staging-https.entrypoints=websecure
       - traefik.http.routers.acs-media-staging-https.priority=100
       - traefik.http.routers.acs-media-staging-https.tls=true
@@ -54,6 +54,7 @@ services:
       SUPABASE_KEY: ${SUPABASE_KEY}
       SUPABASE_BUCKET: ${SUPABASE_BUCKET}
       PROFILE_MEDIA_PROVIDER: ${PROFILE_MEDIA_PROVIDER:-supabase}
+      NEWS_MEDIA_PROVIDER: ${NEWS_MEDIA_PROVIDER:-rustfs}
       RUSTFS_ENDPOINT: http://rustfs:9000
       RUSTFS_REGION: ${RUSTFS_REGION:-us-east-1}
       RUSTFS_BUCKET: ${RUSTFS_BUCKET:-acs-media}

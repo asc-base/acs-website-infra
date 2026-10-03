@@ -28,7 +28,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=acs-prod-network
-      - "traefik.http.routers.acs-media-prod.rule=Host(`acs.kmutt.ac.th`) && Method(`GET`,`HEAD`) && PathPrefix(`/media/acs-media/public/profiles/`)"
+      - "traefik.http.routers.acs-media-prod.rule=Host(`acs.kmutt.ac.th`) && Method(`GET`,`HEAD`) && (PathPrefix(`/media/acs-media/public/profiles/`) || PathPrefix(`/media/acs-media/public/news/`))"
       - traefik.http.routers.acs-media-prod.entrypoints=web
       - traefik.http.routers.acs-media-prod.priority=100
       - traefik.http.routers.acs-media-prod.middlewares=acs-media-prod-prefix
@@ -66,6 +66,7 @@ services:
       SUPABASE_KEY: ${SUPABASE_KEY}
       SUPABASE_BUCKET: ${SUPABASE_BUCKET}
       PROFILE_MEDIA_PROVIDER: ${PROFILE_MEDIA_PROVIDER:-supabase}
+      NEWS_MEDIA_PROVIDER: ${NEWS_MEDIA_PROVIDER:-rustfs}
       RUSTFS_ENDPOINT: http://rustfs:9000
       RUSTFS_REGION: ${RUSTFS_REGION:-us-east-1}
       RUSTFS_BUCKET: ${RUSTFS_BUCKET:-acs-media}
