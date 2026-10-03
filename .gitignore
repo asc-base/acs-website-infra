@@ -1,2 +1,3 @@
 dev/.env
 staging/core-service/.env
+__pycache__/
