@@ -103,6 +103,8 @@ jobs:
 
       # - name: Type check
       #   run: npm run typecheck
+      - name: generate
+        run: npx prisma generate
 
       - name: Test
         run: npm test
