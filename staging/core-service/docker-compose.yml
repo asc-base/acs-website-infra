@@ -55,7 +55,3 @@ services:
 networks:
   dokploy-network:
     external: true
-
-volumes:
-  rustfs-data:
-    name: acs-profile-media-staging
