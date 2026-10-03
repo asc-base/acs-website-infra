@@ -1,4 +1,4 @@
-name: Production Release Next.js
+name: Production Release Elysia
 
 on:
   workflow_call:
