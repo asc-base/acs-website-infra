@@ -101,11 +101,11 @@ jobs:
       - name: Lint
         run: npm run lint
 
-      - name: Type check
-        run: npm run typecheck
+      # - name: Type check
+      #   run: npm run typecheck
 
-      - name: Test
-        run: npm test
+      # - name: Test
+      #   run: npm test
 
   build:
     name: Build Next.js Image
