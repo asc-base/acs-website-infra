@@ -32,9 +32,6 @@ services:
       - "${APP_PORT:?APP_PORT must be set}"
     networks:
       - dokploy-network
-    depends_on:
-      rustfs:
-        condition: service_healthy
     labels:
       - traefik.enable=true
       - traefik.docker.network=dokploy-network
