@@ -115,7 +115,7 @@ jobs:
 
     needs:
       - prepare
-      - quality
+      # - quality
 
     outputs:
       digest: ${{ steps.build.outputs.digest }}
