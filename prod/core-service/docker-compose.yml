@@ -4,6 +4,8 @@ services:
     container_name: acs-core-service-prod
     image: ghcr.io/asc-base/acs-core-service:staging-374d2bc725560cb216437ab125be370cf87c1583
     restart: unless-stopped
+    volumes:
+      - media-migration-state:/var/lib/acs-media-migration
     environment:
       APP_PORT: ${APP_PORT:?APP_PORT must be set}
       SUPABASE_URL: ${SUPABASE_URL}
@@ -11,6 +13,8 @@ services:
       SUPABASE_BUCKET: ${SUPABASE_BUCKET}
       PROFILE_MEDIA_PROVIDER: ${PROFILE_MEDIA_PROVIDER:-supabase}
       NEWS_MEDIA_PROVIDER: ${NEWS_MEDIA_PROVIDER:-rustfs}
+      MEDIA_PROVIDER: ${MEDIA_PROVIDER:-rustfs}
+      MEDIA_SOURCE_ALLOWED_ORIGINS: ${MEDIA_SOURCE_ALLOWED_ORIGINS:-}
       RUSTFS_ENDPOINT: http://rustfs:9000
       RUSTFS_REGION: ${RUSTFS_REGION:-us-east-1}
       RUSTFS_BUCKET: ${RUSTFS_BUCKET:-acs-media}
@@ -44,3 +48,7 @@ networks:
   acs-prod-network:
     external: true
     name: acs-prod-network
+
+volumes:
+  media-migration-state:
+    name: acs-media-migration-state-prod

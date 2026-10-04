@@ -5,6 +5,8 @@ services:
     container_name: acs-core-service-staging
     image: ghcr.io/asc-base/acs-core-service:v1.6.0-rc.1
     restart: unless-stopped
+    volumes:
+      - media-migration-state:/var/lib/acs-media-migration
     environment:
       APP_PORT: ${APP_PORT:?APP_PORT must be set}
       SUPABASE_URL: ${SUPABASE_URL}
@@ -12,6 +14,8 @@ services:
       SUPABASE_BUCKET: ${SUPABASE_BUCKET}
       PROFILE_MEDIA_PROVIDER: ${PROFILE_MEDIA_PROVIDER:-supabase}
       NEWS_MEDIA_PROVIDER: ${NEWS_MEDIA_PROVIDER:-rustfs}
+      MEDIA_PROVIDER: ${MEDIA_PROVIDER:-rustfs}
+      MEDIA_SOURCE_ALLOWED_ORIGINS: ${MEDIA_SOURCE_ALLOWED_ORIGINS:-}
       RUSTFS_ENDPOINT: ${RUSTFS_ENDPOINT}
       RUSTFS_REGION: ${RUSTFS_REGION:-us-east-1}
       RUSTFS_BUCKET: ${RUSTFS_BUCKET:-acs-media}
@@ -69,13 +73,13 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=dokploy-network
-      - "traefik.http.routers.acs-media-staging-http.rule=Host(`${STAGING_HOST:?STAGING_HOST must be set}`) && Method(`GET`,`HEAD`) && (PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/profiles/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/news/`))"
+      - "traefik.http.routers.acs-media-staging-http.rule=Host(`${STAGING_HOST:?STAGING_HOST must be set}`) && Method(`GET`,`HEAD`) && (PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/profiles/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/news/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/projects/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/curriculums/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/class-books/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/images/migrated/`))"
       - traefik.http.routers.acs-media-staging-http.entrypoints=web
       - traefik.http.routers.acs-media-staging-http.priority=100
       - traefik.http.routers.acs-media-staging-http.middlewares=acs-media-staging-https
       - traefik.http.routers.acs-media-staging-http.service=acs-media-staging
       - traefik.http.middlewares.acs-media-staging-https.redirectscheme.scheme=https
-      - "traefik.http.routers.acs-media-staging-https.rule=Host(`${STAGING_HOST:?STAGING_HOST must be set}`) && Method(`GET`,`HEAD`) && (PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/profiles/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/news/`))"
+      - "traefik.http.routers.acs-media-staging-https.rule=Host(`${STAGING_HOST:?STAGING_HOST must be set}`) && Method(`GET`,`HEAD`) && (PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/profiles/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/news/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/projects/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/curriculums/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/class-books/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/images/migrated/`))"
       - traefik.http.routers.acs-media-staging-https.entrypoints=websecure
       - traefik.http.routers.acs-media-staging-https.priority=100
       - traefik.http.routers.acs-media-staging-https.tls=true
@@ -90,3 +94,7 @@ configs:
 networks:
   dokploy-network:
     external: true
+
+volumes:
+  media-migration-state:
+    name: acs-media-migration-state-staging

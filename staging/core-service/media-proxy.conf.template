@@ -2,7 +2,7 @@ server {
   listen 8080;
 
   location /media/${RUSTFS_BUCKET}/public/ {
-    if ($uri !~ "^/media/[^/]+/public/(profiles|news)/.+") { return 404; }
+    if ($uri !~ "^/media/[^/]+/public/(profiles|news|projects|curriculums|class-books|images/migrated)/.+") { return 404; }
     limit_except GET { deny all; }
     rewrite ^/media(/.*)$ $1 break;
     proxy_pass "${RUSTFS_ENDPOINT}";

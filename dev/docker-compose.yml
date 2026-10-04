@@ -49,6 +49,8 @@ services:
     container_name: acs-website-server-dev
     image: ghcr.io/asc-base/acs-core-service:1.2.0
     restart: unless-stopped
+    volumes:
+      - media-migration-state:/var/lib/acs-media-migration
     ports:
       - "${APP_PORT}:${APP_PORT}"
     environment:
@@ -58,6 +60,8 @@ services:
       SUPABASE_BUCKET: ${SUPABASE_BUCKET}
       PROFILE_MEDIA_PROVIDER: ${PROFILE_MEDIA_PROVIDER:-supabase}
       NEWS_MEDIA_PROVIDER: ${NEWS_MEDIA_PROVIDER:-rustfs}
+      MEDIA_PROVIDER: ${MEDIA_PROVIDER:-rustfs}
+      MEDIA_SOURCE_ALLOWED_ORIGINS: ${MEDIA_SOURCE_ALLOWED_ORIGINS:-}
       RUSTFS_ENDPOINT: http://rustfs:9000
       RUSTFS_REGION: ${RUSTFS_REGION:-us-east-1}
       RUSTFS_BUCKET: ${RUSTFS_BUCKET:-acs-media}
@@ -122,3 +126,5 @@ networks:
 volumes:
   rustfs-data:
     name: acs-profile-media-dev
+  media-migration-state:
+    name: acs-media-migration-state-dev

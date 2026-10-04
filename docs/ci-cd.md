@@ -67,8 +67,7 @@ application's `staging` and `production` environments:
 
 `GITHUB_TOKEN` is provided automatically by GitHub for the calling application's
 releases and GHCR package. Secrets placed only in infra are not inherited by callers.
-The existing portal `MEDIA_PUBLIC_ORIGINS` Actions variable is still used at build time;
-ensure its allowlist covers both staging and production hosts for the shared artifact.
+Portal image rendering uses source URLs directly in the browser, so the shared artifact no longer needs a build-time image-host variable.
 
 Jobs are serialized per application without cancelling an active deployment. Infra pushes
 refresh and reapply image updates with up to three attempts to handle another application

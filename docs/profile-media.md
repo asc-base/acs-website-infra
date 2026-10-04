@@ -7,18 +7,19 @@ Dev, staging, and production each run the pinned RustFS 1.0.0 image with a separ
 Set unique `RUSTFS_ADMIN_ACCESS_KEY` and `RUSTFS_ADMIN_SECRET_KEY` values in the environment for the RustFS container. Keep those credentials for administration and one-time bootstrap only.
 
 1. Start RustFS with its persistent volume and wait for its healthcheck.
-2. Run the core service's `media:bootstrap-rustfs` command with the administrator credentials supplied as `RUSTFS_BOOTSTRAP_ACCESS_KEY` and `RUSTFS_BOOTSTRAP_SECRET_KEY`. The script creates `acs-media` if needed and applies public `GetObject` policies only to `public/profiles/*` and `public/news/*`.
-3. In the RustFS console, create an application identity restricted to `s3:PutObject` and `s3:DeleteObject` on `acs-media/public/profiles/*` and `acs-media/public/news/*`. Put its key in `RUSTFS_APP_ACCESS_KEY_ID` and `RUSTFS_APP_SECRET_ACCESS_KEY` for the core service.
+2. Run the core service's `media:bootstrap-rustfs` command with the administrator credentials supplied as `RUSTFS_BOOTSTRAP_ACCESS_KEY` and `RUSTFS_BOOTSTRAP_SECRET_KEY`. The script creates `acs-media` if needed and applies public `GetObject` policies to the profile, news, project, curriculum, classbook and migration-image prefixes.
+3. In the RustFS console, create an application identity restricted to `s3:PutObject`, `s3:GetObject` and `s3:DeleteObject` on those six `acs-media/public/` prefixes. The migration reads the copied object back to verify its checksum before switching database references. Put the key in `RUSTFS_APP_ACCESS_KEY_ID` and `RUSTFS_APP_SECRET_ACCESS_KEY` for the core service.
 4. Set `RUSTFS_BUCKET=acs-media`. Keep `PROFILE_MEDIA_PROVIDER=supabase` until schema deployment, URL backfill, and portal rollout are complete; then switch the core service to `rustfs`.
 
-The Traefik route serves only GET and HEAD under `/media/acs-media/public/profiles/` and `/media/acs-media/public/news/`. It strips `/media` before forwarding to RustFS. No S3 root, object listing, upload route, or console route is public.
+The Traefik route serves only GET and HEAD under the six approved `/media/acs-media/public/` image prefixes. It strips `/media` before forwarding to RustFS. No S3 root, object listing, upload route, or console route is public.
 
-Use a separate volume per environment and back up both the database and the corresponding RustFS volume before production rollout. Switching the profile upload provider does not copy or mirror objects.
+Use a separate volume per environment and back up both the database and the corresponding RustFS volume before production rollout. Switching a media upload provider does not copy or mirror existing objects. See the core service's central-media migration guide for the manifest-backed migration.
 
 ## Staging media route
 
 `staging/core-service/docker-compose.yml` includes a media proxy on `dokploy-network`.
-Its Traefik labels route GET and HEAD requests for profile and news images on
+Its Traefik labels route GET and HEAD requests for profile, news, project,
+curriculum, classbook and migration images on
 `STAGING_HOST` to `RUSTFS_ENDPOINT`, removing `/media` from the upstream path.
 The HTTPS upstream uses its own hostname for Host and TLS SNI. Other object paths
 and write methods are rejected.
@@ -29,6 +30,7 @@ Set these variables in the staging core-service application's Dokploy environmen
 STAGING_HOST=acs-staging.narutchai.com
 PROFILE_MEDIA_PROVIDER=rustfs
 NEWS_MEDIA_PROVIDER=rustfs
+MEDIA_PROVIDER=rustfs
 RUSTFS_ENDPOINT=https://acswebsite-rustfs-a21b17-31-97-48-3.sslip.io/
 RUSTFS_BUCKET=acs-bucket-staging
 RUSTFS_PUBLIC_BASE_URL=https://acs-staging.narutchai.com/media/acs-bucket-staging
