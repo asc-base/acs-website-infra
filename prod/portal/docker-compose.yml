@@ -2,7 +2,7 @@ services:
   portal:
     container_name: acs-website-portal-prod
     # Set this to the sha256 digest from the staging portal image to promote it.
-    image: ghcr.io/asc-base/acs-portal@${PORTAL_IMAGE_DIGEST:?PORTAL_IMAGE_DIGEST must be set}
+    image: ghcr.io/asc-base/acs-portal:v3.9.7
     restart: unless-stopped
     environment:
       # Use the core-service origin reachable over acs-prod-network.
