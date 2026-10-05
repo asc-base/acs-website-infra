@@ -28,7 +28,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=acs-prod-network
-      - "traefik.http.routers.acs-media-prod.rule=Host(`acs.kmutt.ac.th`) && Method(`GET`,`HEAD`) && (PathPrefix(`/media/acs-media/public/profiles/`) || PathPrefix(`/media/acs-media/public/news/`) || PathPrefix(`/media/acs-media/public/projects/`) || PathPrefix(`/media/acs-media/public/curriculums/`) || PathPrefix(`/media/acs-media/public/class-books/`) || PathPrefix(`/media/acs-media/public/images/migrated/`))"
+      - "traefik.http.routers.acs-media-prod.rule=Host(`acs.kmutt.ac.th`) && (Method(`GET`) || Method(`HEAD`)) && (PathPrefix(`/media/acs-media/public/profiles/`) || PathPrefix(`/media/acs-media/public/news/`) || PathPrefix(`/media/acs-media/public/projects/`) || PathPrefix(`/media/acs-media/public/curriculums/`) || PathPrefix(`/media/acs-media/public/class-books/`) || PathPrefix(`/media/acs-media/public/images/migrated/`))"
       - traefik.http.routers.acs-media-prod.entrypoints=web
       - traefik.http.routers.acs-media-prod.priority=100
       - traefik.http.routers.acs-media-prod.middlewares=acs-media-prod-prefix

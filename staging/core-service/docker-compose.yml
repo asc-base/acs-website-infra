@@ -73,13 +73,13 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=dokploy-network
-      - "traefik.http.routers.acs-media-staging-http.rule=Host(`${STAGING_HOST:?STAGING_HOST must be set}`) && Method(`GET`,`HEAD`) && (PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/profiles/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/news/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/projects/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/curriculums/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/class-books/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/images/migrated/`))"
+      - "traefik.http.routers.acs-media-staging-http.rule=Host(`${STAGING_HOST:?STAGING_HOST must be set}`) && (Method(`GET`) || Method(`HEAD`)) && (PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/profiles/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/news/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/projects/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/curriculums/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/class-books/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/images/migrated/`))"
       - traefik.http.routers.acs-media-staging-http.entrypoints=web
       - traefik.http.routers.acs-media-staging-http.priority=100
       - traefik.http.routers.acs-media-staging-http.middlewares=acs-media-staging-https
       - traefik.http.routers.acs-media-staging-http.service=acs-media-staging
       - traefik.http.middlewares.acs-media-staging-https.redirectscheme.scheme=https
-      - "traefik.http.routers.acs-media-staging-https.rule=Host(`${STAGING_HOST:?STAGING_HOST must be set}`) && Method(`GET`,`HEAD`) && (PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/profiles/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/news/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/projects/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/curriculums/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/class-books/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/images/migrated/`))"
+      - "traefik.http.routers.acs-media-staging-https.rule=Host(`${STAGING_HOST:?STAGING_HOST must be set}`) && (Method(`GET`) || Method(`HEAD`)) && (PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/profiles/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/news/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/projects/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/curriculums/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/class-books/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/images/migrated/`))"
       - traefik.http.routers.acs-media-staging-https.entrypoints=websecure
       - traefik.http.routers.acs-media-staging-https.priority=100
       - traefik.http.routers.acs-media-staging-https.tls=true
