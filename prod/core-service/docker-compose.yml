@@ -2,7 +2,7 @@ services:
   servers:
     # platform: linux/amd64
     container_name: acs-core-service-prod
-    image: ghcr.io/asc-base/acs-core-service:v1.6.1-rc.3
+    image: ghcr.io/asc-base/acs-core-service:staging-374d2bc725560cb216437ab125be370cf87c1583
     restart: unless-stopped
     volumes:
       - media-migration-state:/var/lib/acs-media-migration
@@ -15,7 +15,7 @@ services:
       NEWS_MEDIA_PROVIDER: ${NEWS_MEDIA_PROVIDER:-rustfs}
       MEDIA_PROVIDER: ${MEDIA_PROVIDER:-rustfs}
       MEDIA_SOURCE_ALLOWED_ORIGINS: ${MEDIA_SOURCE_ALLOWED_ORIGINS:-}
-      RUSTFS_ENDPOINT: http://rustfs:9000
+      RUSTFS_ENDPOINT: ${RUSTFS_ENDPOINT:?RUSTFS_ENDPOINT must be set}
       RUSTFS_REGION: ${RUSTFS_REGION:-us-east-1}
       RUSTFS_BUCKET: ${RUSTFS_BUCKET:-acs-media}
       RUSTFS_ACCESS_KEY_ID: ${RUSTFS_APP_ACCESS_KEY_ID:-}
