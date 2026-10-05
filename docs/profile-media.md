@@ -24,7 +24,7 @@ RUSTFS_READ_ENDPOINT=https://acswebsite-rustfs-a21b17-31-97-48-3.sslip.io/
 RUSTFS_BUCKET=acs-bucket-staging
 ```
 
-For local Docker development and production, use `RUSTFS_READ_ENDPOINT=http://rustfs:9000` and `RUSTFS_BUCKET=acs-media`. For a local portal outside Docker, set the endpoint to an address reachable from the host.
+For local Docker development, use `RUSTFS_READ_ENDPOINT=http://rustfs:9000` and `RUSTFS_BUCKET=acs-media`. In production, use `RUSTFS_READ_ENDPOINT=http://acs-rustfs-prod:9000` and `RUSTFS_BUCKET=acs-media`; the portal and RustFS containers share the external `acs-prod-network`. For a local portal outside Docker, set the endpoint to an address reachable from the host.
 
 Deploy the portal with its two values set. Staging's core-service still uses `RUSTFS_ENDPOINT` for S3 uploads; the portal uses `RUSTFS_READ_ENDPOINT` to serve public objects.
 

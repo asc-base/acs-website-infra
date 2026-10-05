@@ -24,6 +24,7 @@ services:
       - "9000"
     networks:
       - acs-prod-network
+      - prod-shared-network
     labels:
       - traefik.enable=true
       - traefik.docker.network=acs-prod-network
@@ -113,7 +114,7 @@ services:
       API_URL: ${API_URL}
       NODE_ENV: PRODUCTION
       PORT: ${PORTAL_PORT}
-      RUSTFS_READ_ENDPOINT: ${RUSTFS_READ_ENDPOINT:-http://rustfs:9000}
+      RUSTFS_READ_ENDPOINT: ${RUSTFS_READ_ENDPOINT:-http://acs-rustfs-prod:9000}
       RUSTFS_BUCKET: ${RUSTFS_BUCKET:-acs-media}
     # depends_on:
     #   servers:
@@ -125,6 +126,9 @@ services:
 networks:
   acs-prod-network:
     driver: bridge
+  prod-shared-network:
+    external: true
+    name: acs-prod-network
   # gateway-nginx:
   #   external: true
 
