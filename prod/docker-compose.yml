@@ -24,17 +24,9 @@ services:
       - "9000"
     networks:
       - acs-prod-network
-      - media-proxy
     labels:
       - traefik.enable=true
       - traefik.docker.network=acs-prod-network
-      - "traefik.http.routers.acs-media-prod.rule=Host(`acs.kmutt.ac.th`) && (Method(`GET`) || Method(`HEAD`)) && (PathPrefix(`/media/acs-media/public/profiles/`) || PathPrefix(`/media/acs-media/public/news/`) || PathPrefix(`/media/acs-media/public/projects/`) || PathPrefix(`/media/acs-media/public/curriculums/`) || PathPrefix(`/media/acs-media/public/class-books/`) || PathPrefix(`/media/acs-media/public/images/migrated/`))"
-      - traefik.http.routers.acs-media-prod.entrypoints=web
-      - traefik.http.routers.acs-media-prod.priority=100
-      - traefik.http.routers.acs-media-prod.middlewares=acs-media-prod-prefix
-      - traefik.http.middlewares.acs-media-prod-prefix.stripprefix.prefixes=/media
-      - traefik.http.routers.acs-media-prod.service=acs-media-prod
-      - traefik.http.services.acs-media-prod.loadbalancer.server.port=9000
 
   database:
     container_name: acs-website-database-prod
@@ -121,6 +113,8 @@ services:
       API_URL: ${API_URL}
       NODE_ENV: PRODUCTION
       PORT: ${PORTAL_PORT}
+      RUSTFS_READ_ENDPOINT: ${RUSTFS_READ_ENDPOINT:-http://rustfs:9000}
+      RUSTFS_BUCKET: ${RUSTFS_BUCKET:-acs-media}
     # depends_on:
     #   servers:
     #     condition: service_healthy
@@ -131,9 +125,6 @@ services:
 networks:
   acs-prod-network:
     driver: bridge
-  media-proxy:
-    external: true
-    name: acs-prod-network
   # gateway-nginx:
   #   external: true
 

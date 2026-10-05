@@ -56,41 +56,6 @@ services:
       - traefik.http.routers.acs-core-staging-https.service=acs-core-staging
       - traefik.http.services.acs-core-staging.loadbalancer.server.port=${APP_PORT:?APP_PORT must be set}
 
-  media-proxy:
-    image: nginx:stable-alpine@sha256:0985e772fb9f729e6fa0980da05fca5d9c468e870eed43071545afa9d2e27d94
-    restart: unless-stopped
-    environment:
-      RUSTFS_ENDPOINT: ${RUSTFS_ENDPOINT:?RUSTFS_ENDPOINT must be set}
-      RUSTFS_BUCKET: ${RUSTFS_BUCKET:-acs-media}
-      NGINX_ENVSUBST_FILTER: "^RUSTFS_(ENDPOINT|BUCKET)$"
-    configs:
-      - source: staging-media-proxy
-        target: /etc/nginx/templates/default.conf.template
-    expose:
-      - "8080"
-    networks:
-      - dokploy-network
-    labels:
-      - traefik.enable=true
-      - traefik.docker.network=dokploy-network
-      - "traefik.http.routers.acs-media-staging-http.rule=Host(`${STAGING_HOST:?STAGING_HOST must be set}`) && (Method(`GET`) || Method(`HEAD`)) && (PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/profiles/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/news/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/projects/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/curriculums/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/class-books/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/images/migrated/`))"
-      - traefik.http.routers.acs-media-staging-http.entrypoints=web
-      - traefik.http.routers.acs-media-staging-http.priority=100
-      - traefik.http.routers.acs-media-staging-http.middlewares=acs-media-staging-https
-      - traefik.http.routers.acs-media-staging-http.service=acs-media-staging
-      - traefik.http.middlewares.acs-media-staging-https.redirectscheme.scheme=https
-      - "traefik.http.routers.acs-media-staging-https.rule=Host(`${STAGING_HOST:?STAGING_HOST must be set}`) && (Method(`GET`) || Method(`HEAD`)) && (PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/profiles/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/news/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/projects/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/curriculums/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/class-books/`) || PathPrefix(`/media/${RUSTFS_BUCKET:-acs-media}/public/images/migrated/`))"
-      - traefik.http.routers.acs-media-staging-https.entrypoints=websecure
-      - traefik.http.routers.acs-media-staging-https.priority=100
-      - traefik.http.routers.acs-media-staging-https.tls=true
-      - traefik.http.routers.acs-media-staging-https.tls.certresolver=letsencrypt
-      - traefik.http.routers.acs-media-staging-https.service=acs-media-staging
-      - traefik.http.services.acs-media-staging.loadbalancer.server.port=8080
-
-configs:
-  staging-media-proxy:
-    file: ./media-proxy.conf.template
-
 networks:
   dokploy-network:
     external: true

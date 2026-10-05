@@ -1,13 +1,15 @@
 services:
   portal:
     container_name: acs-website-portal-staging
-    image: ghcr.io/asc-base/acs-portal:v3.9.6-rc.1
+    image: ghcr.io/asc-base/acs-portal:v3.9.7-rc.1
     restart: unless-stopped
     environment:
       # Use the core-service origin reachable over dokploy-network.
       API_URL: ${API_URL:?API_URL must be set}
       NODE_ENV: staging
       PORT: "3000"
+      RUSTFS_READ_ENDPOINT: ${RUSTFS_READ_ENDPOINT:?RUSTFS_READ_ENDPOINT must be set}
+      RUSTFS_BUCKET: ${RUSTFS_BUCKET:?RUSTFS_BUCKET must be set}
     expose:
       - "3000"
     networks:

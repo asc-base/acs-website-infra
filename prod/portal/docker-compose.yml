@@ -9,6 +9,8 @@ services:
       API_URL: ${API_URL:?API_URL must be set}
       NODE_ENV: production
       PORT: "3000"
+      RUSTFS_READ_ENDPOINT: ${RUSTFS_READ_ENDPOINT:-http://rustfs:9000}
+      RUSTFS_BUCKET: ${RUSTFS_BUCKET:-acs-media}
     # depends_on:
     #   servers:
     #     condition: service_healthy

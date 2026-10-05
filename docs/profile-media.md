@@ -11,46 +11,23 @@ Set unique `RUSTFS_ADMIN_ACCESS_KEY` and `RUSTFS_ADMIN_SECRET_KEY` values in the
 3. In the RustFS console, create an application identity restricted to `s3:PutObject`, `s3:GetObject` and `s3:DeleteObject` on those six `acs-media/public/` prefixes. The migration reads the copied object back to verify its checksum before switching database references. Put the key in `RUSTFS_APP_ACCESS_KEY_ID` and `RUSTFS_APP_SECRET_ACCESS_KEY` for the core service.
 4. Set `RUSTFS_BUCKET=acs-media`. Keep `PROFILE_MEDIA_PROVIDER=supabase` until schema deployment, URL backfill, and portal rollout are complete; then switch the core service to `rustfs`.
 
-The Traefik route serves only GET and HEAD under the six approved `/media/acs-media/public/` image prefixes. It strips `/media` before forwarding to RustFS. No S3 root, object listing, upload route, or console route is public.
+The Next.js runtime rewrite serves only GET and HEAD under the six approved `/media/<bucket>/public/` image prefixes. It proxies objects to RustFS without forwarding browser cookies or authorization headers. No S3 root, object listing, upload route, or console route is exposed through the portal.
 
 Use a separate volume per environment and back up both the database and the corresponding RustFS volume before production rollout. Switching a media upload provider does not copy or mirror existing objects. See the core service's central-media migration guide for the manifest-backed migration.
 
-## Staging media route
+## Portal media configuration
 
-`staging/core-service/docker-compose.yml` includes a media proxy on `dokploy-network`.
-Its Traefik labels route GET and HEAD requests for profile, news, project,
-curriculum, classbook and migration images on
-`STAGING_HOST` to `RUSTFS_ENDPOINT`, removing `/media` from the upstream path.
-The HTTPS upstream uses its own hostname for Host and TLS SNI. Other object paths
-and write methods are rejected.
-
-Set these variables in the staging core-service application's Dokploy environment:
+Set `RUSTFS_READ_ENDPOINT` and `RUSTFS_BUCKET` in each portal environment. They are read when the portal handles a request, so one built portal image works in local, staging and production.
 
 ```env
-STAGING_HOST=acs-staging.narutchai.com
-PROFILE_MEDIA_PROVIDER=rustfs
-NEWS_MEDIA_PROVIDER=rustfs
-MEDIA_PROVIDER=rustfs
-RUSTFS_ENDPOINT=https://acswebsite-rustfs-a21b17-31-97-48-3.sslip.io/
+RUSTFS_READ_ENDPOINT=https://acswebsite-rustfs-a21b17-31-97-48-3.sslip.io/
 RUSTFS_BUCKET=acs-bucket-staging
-RUSTFS_PUBLIC_BASE_URL=https://acs-staging.narutchai.com/media/acs-bucket-staging
-RUSTFS_ACCESS_KEY_ID=<application-access-key>
-RUSTFS_SECRET_ACCESS_KEY=<application-secret-key>
 ```
 
-Deploy the updated staging core-service Compose application. The existing `web`,
-`websecure`, and `letsencrypt` Traefik configuration is shared with the API route;
-no additional Dokploy domain or hand-written Traefik route is needed. Keep
-`media-proxy.conf.template` alongside the Compose file in the Git checkout; the
-proxy renders the template from its endpoint and bucket environment variables.
+For local Docker development and production, use `RUSTFS_READ_ENDPOINT=http://rustfs:9000` and `RUSTFS_BUCKET=acs-media`. For a local portal outside Docker, set the endpoint to an address reachable from the host.
 
-With the staging env saved in `staging/core-service/.env`, validate the proxy before
-deployment from the repository root:
+Deploy the portal with its two values set. Staging's core-service still uses `RUSTFS_ENDPOINT` for S3 uploads; the portal uses `RUSTFS_READ_ENDPOINT` to serve public objects.
 
-```sh
-docker compose --env-file staging/core-service/.env -f staging/core-service/docker-compose.yml config --quiet
-docker compose --env-file staging/core-service/.env -f staging/core-service/docker-compose.yml run --rm --no-deps media-proxy nginx -t
-```
+Run `npm run test:media-rewrite` in the portal repository to test its production build against a local mock object store.
 
-After redeploying, an existing profile image URL under the staging `/media` path
-should return `200` with an image content type, rather than the portal's HTML 404.
+After deploying, an existing profile image URL under the staging `/media` path should return `200` with an image content type.

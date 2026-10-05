@@ -109,7 +109,8 @@ services:
       API_URL: ${API_URL}
       NODE_ENV: development
       PORT: ${PORTAL_PORT}
-      RUSTFS_READ_ENDPOINT: http://rustfs:9000
+      RUSTFS_READ_ENDPOINT: ${RUSTFS_READ_ENDPOINT:-http://rustfs:9000}
+      RUSTFS_BUCKET: ${RUSTFS_BUCKET:-acs-media}
     # depends_on:
     #   servers:
     #     condition: service_healthy
