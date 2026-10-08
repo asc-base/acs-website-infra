@@ -1,7 +1,8 @@
+x-portl-image: &portl-image ghcr.io/asc-base/acs-portal:v3.10.0-rc.1
 services:
   portal:
     container_name: acs-website-portal-staging
-    image: ghcr.io/asc-base/acs-portal:v3.9.8-rc.1
+    image: *portl-image
     restart: unless-stopped
     environment:
       # Use the core-service origin reachable over dokploy-network.
