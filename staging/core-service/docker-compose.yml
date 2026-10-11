@@ -3,7 +3,7 @@ services:
   servers:
     platform: linux/amd64
     container_name: acs-core-service-staging
-    image: ghcr.io/asc-base/acs-core-service:v1.7.0-rc.1
+    image: ghcr.io/asc-base/acs-core-service:v1.7.0-rc.3
     restart: unless-stopped
     volumes:
       - media-migration-state:/var/lib/acs-media-migration
@@ -34,6 +34,13 @@ services:
       RUN_SEED: ${RUN_SEED}
       BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
       BETTER_AUTH_URL: ${BETTER_AUTH_URL}
+      FRONTEND_RESET_PASSWORD_URL: ${FRONTEND_RESET_PASSWORD_URL:?FRONTEND_RESET_PASSWORD_URL must be set}
+      MAIL_HOST: ${MAIL_HOST:?MAIL_HOST must be set}
+      MAIL_PORT: ${MAIL_PORT:-587}
+      MAIL_SECURE: ${MAIL_SECURE:-false}
+      MAIL_USER: ${MAIL_USER:?MAIL_USER must be set}
+      MAIL_PASS: ${MAIL_PASS:?MAIL_PASS must be set}
+      MAIL_FROM: ${MAIL_FROM:?MAIL_FROM must be set}
 
     expose:
       - "${APP_PORT:?APP_PORT must be set}"
