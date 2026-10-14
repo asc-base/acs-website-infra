@@ -1,4 +1,4 @@
-x-portl-image: &portl-image ghcr.io/asc-base/acs-portal:v3.10.1-rc.3@sha256:c7d22b5a0815d992db298b6712aa61f8c897e4a69d0f752c96619c21e93dba5c
+x-portl-image: &portl-image ghcr.io/asc-base/acs-portal:v3.10.1-rc.3
 services:
   portal:
     container_name: acs-website-portal-staging
