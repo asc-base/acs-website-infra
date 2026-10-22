@@ -2,7 +2,7 @@ services:
   servers:
     # platform: linux/amd64
     container_name: acs-core-service-prod
-    image: ghcr.io/asc-base/acs-core-service:v1.7.1
+    image: ghcr.io/asc-base/acs-core-service:v1.7.8
     restart: unless-stopped
     volumes:
       - media-migration-state:/var/lib/acs-media-migration
