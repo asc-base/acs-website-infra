@@ -80,6 +80,8 @@ services:
       ENVIRONMENT: development
       APP_HOST: ${APP_HOST}
       SECRET_JWT: ${SECRET_JWT}
+      INITIAL_ADMIN_EMAIL: ${INITIAL_ADMIN_EMAIL:-}
+      INITIAL_ADMIN_PASSWORD: ${INITIAL_ADMIN_PASSWORD:-}
       JWT_EXPIRATION_HOURS: ${JWT_EXPIRATION_HOURS}
     depends_on:
       database:

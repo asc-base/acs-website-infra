@@ -3,7 +3,7 @@ services:
   servers:
     platform: linux/amd64
     container_name: acs-core-service-staging
-    image: ghcr.io/asc-base/acs-core-service:v1.7.2-rc.8
+    image: ghcr.io/asc-base/acs-core-service:v1.7.3-rc.1
     restart: unless-stopped
     volumes:
       - media-migration-state:/var/lib/acs-media-migration
@@ -28,6 +28,8 @@ services:
       ENVIRONMENT: prod
       APP_HOST: ${APP_HOST}
       SECRET_JWT: ${SECRET_JWT}
+      INITIAL_ADMIN_EMAIL: ${INITIAL_ADMIN_EMAIL:-}
+      INITIAL_ADMIN_PASSWORD: ${INITIAL_ADMIN_PASSWORD:-}
       JWT_EXPIRATION_HOURS: ${JWT_EXPIRATION_HOURS}
       ALLOW_ORIGIN: ${ALLOW_ORIGIN}
       SKIP_MIGRATE: ${SKIP_MIGRATE}
