@@ -40,3 +40,11 @@ services:
       ALLOW_ORIGIN: ${ALLOW_ORIGIN}
       SKIP_MIGRATE: ${SKIP_MIGRATE}
       RUN_SEED: ${RUN_SEED}
+      networks:
+        - default
+        - dokploy-network
+
+networks:
+  dokploy-network:
+    external: true
+    name: dokploy-network
