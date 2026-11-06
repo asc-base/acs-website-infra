@@ -1,6 +1,6 @@
 services:
   servers:
-    # platform: linux/amd64
+    platform: linux/amd64
     container_name: acs-core-service-prod
     image: ghcr.io/asc-base/acs-core-service:v1.7.8
     restart: unless-stopped
@@ -42,22 +42,22 @@ services:
       ALLOW_ORIGIN: ${ALLOW_ORIGIN}
       SKIP_MIGRATE: ${SKIP_MIGRATE}
       RUN_SEED: ${RUN_SEED}
-    networks:
-      - acs-prod-network
-    labels:
-      - traefik.enable=true
-      - traefik.docker.network=acs-prod-network
-      - "traefik.http.routers.acs-core.rule=Host(`acs.kmutt.ac.th`) && (Path(`/api`) || PathPrefix(`/api/`))"
-      - traefik.http.routers.acs-core.entrypoints=web
-      - traefik.http.routers.acs-core.priority=100
-      - traefik.http.routers.acs-core.service=acs-core
-      - traefik.http.services.acs-core.loadbalancer.server.port=${APP_PORT:?APP_PORT must be set}
+    # networks:
+    #   - acs-prod-network
+    # labels:
+    #   - traefik.enable=true
+    #   - traefik.docker.network=acs-prod-network
+    #   - "traefik.http.routers.acs-core.rule=Host(`acs.kmutt.ac.th`) && (Path(`/api`) || PathPrefix(`/api/`))"
+    #   - traefik.http.routers.acs-core.entrypoints=web
+    #   - traefik.http.routers.acs-core.priority=100
+    #   - traefik.http.routers.acs-core.service=acs-core
+    #   - traefik.http.services.acs-core.loadbalancer.server.port=${APP_PORT:?APP_PORT must be set}
 
-networks:
-  acs-prod-network:
-    external: true
-    name: acs-prod-network
+# networks:
+#   acs-prod-network:
+#     external: true
+#     name: acs-prod-network
 
-volumes:
-  media-migration-state:
-    name: acs-media-migration-state-prod
+# volumes:
+#   media-migration-state:
+#     name: acs-media-migration-state-prod
