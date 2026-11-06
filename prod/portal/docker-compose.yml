@@ -15,17 +15,10 @@ services:
     #   servers:
     #     condition: service_healthy
     networks:
-      - acs-prod-network
-    labels:
-      - traefik.enable=true
-      - traefik.docker.network=acs-prod-network
-      - traefik.http.routers.acs-portal.rule=Host(`acs.kmutt.ac.th`)
-      - traefik.http.routers.acs-portal.entrypoints=web
-      - traefik.http.routers.acs-portal.priority=1
-      - traefik.http.routers.acs-portal.service=acs-portal
-      - traefik.http.services.acs-portal.loadbalancer.server.port=3000
+      - dokploy-network
+
 
 networks:
-  acs-prod-network:
+  dokploy-network:
     external: true
-    name: acs-prod-network
+    name: dokploy-network
