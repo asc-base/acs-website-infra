@@ -16,12 +16,8 @@ services:
     #     condition: service_healthy
     networks:
       - dokploy-network
-      - acs-prod-network
 
 networks:
-  acs-prod-network:
-    external: true
-    name: acs-prod-network
   dokploy-network:
     external: true
     name: dokploy-network
