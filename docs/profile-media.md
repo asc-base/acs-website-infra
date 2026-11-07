@@ -20,7 +20,7 @@ Use a separate volume per environment and back up both the database and the corr
 Set `RUSTFS_READ_ENDPOINT` and `RUSTFS_BUCKET` in each portal environment. They are read when the portal handles a request, so one built portal image works in local, staging and production.
 
 ```env
-RUSTFS_READ_ENDPOINT=https://acswebsite-rustfs-a21b17-31-97-48-3.sslip.io/
+RUSTFS_READ_ENDPOINT=http://acs-rustfs-staging:9000
 RUSTFS_BUCKET=acs-bucket-staging
 ```
 
@@ -31,3 +31,5 @@ Deploy the portal with its two values set. Staging's core-service still uses `RU
 Run `npm run test:media-rewrite` in the portal repository to test its production build against a local mock object store.
 
 After deploying, an existing profile image URL under the staging `/media` path should return `200` with an image content type.
+
+Connect the existing staging RustFS container to `dokploy-network` with the alias `acs-rustfs-staging`. Keep its existing volume. Configure each portal `API_URL` with the corresponding `acs-core-service-staging` or `acs-core-service-prod` container name and its `APP_PORT`. Configure the portal public domain in Dokploy and route all paths to port 3000.

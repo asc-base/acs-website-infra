@@ -25,9 +25,6 @@ services:
     networks:
       - acs-prod-network
       - prod-shared-network
-    labels:
-      - traefik.enable=true
-      - traefik.docker.network=acs-prod-network
 
   database:
     container_name: acs-website-database-prod
